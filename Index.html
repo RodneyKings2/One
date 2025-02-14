@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Ti 💖</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: black;
+            overflow: hidden;
+            text-align: center;
+            font-family: 'Dancing Script', cursive;
+            position: relative;
+        }
+
+        /* Fondo estrellado */
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/stardust.png');
+            animation: twinkling 5s infinite alternate;
+        }
+
+        @keyframes twinkling {
+            0% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        /* Contenedor de mensaje */
+        .container {
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.8);
+            animation: fadeIn 2s ease-in-out;
+            z-index: 2;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Corazones flotando */
+        .hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: pink;
+            clip-path: polygon(50% 0%, 100% 35%, 75% 100%, 50% 75%, 25% 100%, 0% 35%);
+            opacity: 0.8;
+            animation: floatUp 5s infinite ease-in-out;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        }
+
+        /* Cinturón de Orión */
+        canvas {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+        }
+
+    </style>
+</head>
+<body>
+
+    <canvas id="orion"></canvas>
+
+    <div class="stars"></div>
+
+    <div class="hearts"></div>
+    
+    <div class="container">
+      <br>
+      <br>
+        💖 Te lindo día, guapa 💖  
+        <br>
+        Sabes que te amo y demasiado
+    </div>
+
+    <script>
+        // Generar corazones flotando
+        function createHeart() {
+            const heart = document.createElement("div");
+            heart.classList.add("heart");
+            document.querySelector(".hearts").appendChild(heart);
+            
+            const size = Math.random() * 20 + 10 + "px";
+            heart.style.width = size;
+            heart.style.height = size;
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = Math.random() * 2 + 3 + "s";
+            
+            setTimeout(() => { heart.remove(); }, 5000);
+        }
+        setInterval(createHeart, 300);
+
+        // Dibujar el Cinturón de Orión en el canvas
+        const canvas = document.getElementById("orion");
+        const ctx = canvas.getContext("2d");
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        function drawOrionBelt() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = "white";
+            ctx.lineWidth = 1;
+            ctx.globalAlpha = 0.8;
+
+            // Posiciones aproximadas del Cinturón de Orión
+            const stars = [
+                { x: canvas.width * 0.4, y: canvas.height * 0.4, name: "Alnitak" },
+                { x: canvas.width * 0.5, y: canvas.height * 0.45, name: "Alnilam" },
+                { x: canvas.width * 0.6, y: canvas.height * 0.5, name: "Mintaka" }
+            ];
+
+            // Dibujar estrellas
+            ctx.fillStyle = "white";
+            stars.forEach(star => {
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, 5, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Dibujar líneas conectando las estrellas
+            ctx.beginPath();
+            ctx.moveTo(stars[0].x, stars[0].y);
+            ctx.lineTo(stars[1].x, stars[1].y);
+            ctx.lineTo(stars[2].x, stars[2].y);
+            ctx.stroke();
+
+            // Etiquetar las estrellas
+            ctx.fillStyle = "white";
+            ctx.font = "16px Arial";
+            stars.forEach(star => {
+                ctx.fillText(star.name, star.x + 10, star.y - 10);
+            });
+        }
+
+        resizeCanvas();
+        drawOrionBelt();
+        window.addEventListener("resize", () => {
+            resizeCanvas();
+            drawOrionBelt();
+        });
+
+    </script>
+
+</body>
+</html>
